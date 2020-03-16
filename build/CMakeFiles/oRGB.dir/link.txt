@@ -1,0 +1,2 @@
+/usr/bin/ar qc liboRGB.a  CMakeFiles/oRGB.dir/src/wrapper.cpp.o
+/usr/bin/ranlib liboRGB.a
