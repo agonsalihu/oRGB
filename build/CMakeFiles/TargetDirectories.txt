@@ -1,4 +1,0 @@
-/home/solaborate/Desktop/oRGB/build/CMakeFiles/rebuild_cache.dir
-/home/solaborate/Desktop/oRGB/build/CMakeFiles/edit_cache.dir
-/home/solaborate/Desktop/oRGB/build/CMakeFiles/oRGB.dir
-/home/solaborate/Desktop/oRGB/build/CMakeFiles/oRGB_exec.dir

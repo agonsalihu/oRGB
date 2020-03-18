@@ -1,11 +1,8 @@
 #include "wrapper.hpp"
-#include <Eigen/Dense>
-#include <Eigen/Geometry>
+#include "ConvertColorSpace.hpp"
+
 #include <iostream>
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/imgcodecs.hpp>
+
 
 int main(int argc,char **argv){
     
@@ -29,7 +26,11 @@ int main(int argc,char **argv){
 
     cv::Mat res =  img.clone();
 
-    cv::MatIterator_<cv::Vec3b> it;
+    //ConvertColorSpace ccs(res);
+
+    //res=ccs.convertToORGB();
+
+    /*cv::MatIterator_<cv::Vec3b> it;
 
     double b1,g1,r1;
     for(it = res.begin<cv::Vec3b>(); it != res.end<cv::Vec3b>(); ++it)
@@ -46,10 +47,10 @@ int main(int argc,char **argv){
         (*it)[0] =mat.multiply(translate_matrix,color1)[0];
         (*it)[1] =mat.multiply(translate_matrix,color1)[1];
         (*it)[2] =mat.multiply(translate_matrix,color1)[2];
-    }
+    }*/
 
-    cv::namedWindow("Iterator",cv::WINDOW_FULLSCREEN);
-    cv::imshow("Iterator",res);
+    //cv::namedWindow("Iterator",cv::WINDOW_FULLSCREEN);
+    //cv::imshow("Iterator",res);
 
     std::cout<<"Press any key to close..."<<std::endl;
     cv::waitKey(0);
