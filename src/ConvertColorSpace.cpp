@@ -20,7 +20,7 @@ cv::Mat ConvertColorSpace::getDeNormalized(){
     return imgRgb;
 }
 
-/*cv::Mat ConvertColorSpace::convertToORGB(){
+cv::Mat ConvertColorSpace::convertToORGB(){
     
     cv::MatIterator_<cv::Vec3d> it;
     
@@ -28,9 +28,9 @@ cv::Mat ConvertColorSpace::getDeNormalized(){
 
         double gamma=2.2;
 
-        (*it)[0]=pow(static_cast<double>((*it)[0]/255.0),(1.0/gamma)*255);
-        (*it)[1]=pow(static_cast<double>((*it)[1]/255.0),(1.0/gamma)*255);
-        (*it)[2]=pow(static_cast<double>((*it)[2]/255.0),(1.0/gamma)*255);
+        (*it)[0]=(pow((float)((*it)[0]/255.0),1/gamma)*255.0f);
+        (*it)[1]=(pow((float)((*it)[0]/255.0),1/gamma)*255.0f);
+        (*it)[2]=(pow((float)((*it)[0]/255.0),1/gamma)*255.0f);
     
     }
 
@@ -55,7 +55,7 @@ cv::Mat ConvertColorSpace::getDeNormalized(){
 
     
     return img;
-}*/
+}
 
 void ConvertColorSpace::convertToRGB(){
 

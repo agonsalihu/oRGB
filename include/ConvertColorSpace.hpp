@@ -32,7 +32,7 @@ class ConvertColorSpace{
         cv::Mat getNormalized();
         cv::Mat getDeNormalized();
 
-        //cv::Mat convertToORGB();
+        cv::Mat convertToORGB();
         void convertToRGB();
 
 };

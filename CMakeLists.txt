@@ -17,8 +17,7 @@ set(CMAKE_CXX_FLAGS
     -pedantic \
     -Wall \
     -Wextra \
-    -Wcast-align \
-    -Wcast-qual \
+    -Wcast-align \   
     -Wdisabled-optimization \
     -Wformat=2 \
     -Winit-self \
