@@ -15,17 +15,27 @@ int main(int argc,char **argv){
     
     cv::namedWindow("Result",cv::WINDOW_FULLSCREEN);
     cv::imshow("Result",img);
+
     
     cv::Mat res =  img.clone();
-    cv::cvtColor(res, res, cv::COLOR_BGR2RGB);
-
     ConvertColorSpace ccs(res);
+    cv::cvtColor(res, res, cv::COLOR_BGR2RGB);
     res=ccs.convertToORGB();
-    
     cv::cvtColor(res, res, cv::COLOR_RGB2BGR);
-    
+
     cv::namedWindow("oRGB",cv::WINDOW_FULLSCREEN);
     cv::imshow("oRGB",res);
+
+
+    cv::Mat res1=res.clone();
+    cv::cvtColor(res1, res1, cv::COLOR_BGR2RGB);
+    ConvertColorSpace ccs1(res1);
+    res1=ccs1.convertToRGB();
+    cv::cvtColor(res1, res1, cv::COLOR_RGB2BGR);
+    
+
+    cv::namedWindow("RGB",cv::WINDOW_FULLSCREEN);
+    cv::imshow("RGB",res1);
 
     std::cout<<"Press any key to close..."<<std::endl;
     cv::waitKey(0);
