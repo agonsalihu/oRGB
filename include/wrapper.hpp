@@ -1,10 +1,23 @@
+/**
+ * @file wrapper.hpp
+ * @author Agon Salihu (agon.salihu99@hotmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2020-03-22
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #ifndef ___WRAPPER_H____
 #define ___WRAPPER_H____
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <iostream>
-
+/**
+ * @brief Wrapper Class
+ * 
+ */
 class Wrapper{
 
     private:
