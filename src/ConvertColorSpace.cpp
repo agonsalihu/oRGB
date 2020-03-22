@@ -54,17 +54,18 @@ cv::Mat ConvertColorSpace::convertToORGB(){
      
         vec = transform_matrix *vec;
 
-        (*it)[0] = vec[0] * 255.0;
-        (*it)[1] = vec[1] * 255.0;
-        (*it)[2] = vec[2] * 255.0;
+        (*it)[0] = vec[0]*255;
+        (*it)[1] = vec[1]*255;
+        (*it)[2] = vec[2]*255;
        
     }
     
     Eigen::Matrix3d rotate_matrix{{1,0,0},
                                   {0,1,0},
                                   {0,0,1}};
-
+    
     for(it=img.begin<cv::Vec3d>();it!=img.end<cv::Vec3d>();it++){
+        
         
         double theta=atan2((*it)[2],(*it)[1]);
 
@@ -76,7 +77,7 @@ cv::Mat ConvertColorSpace::convertToORGB(){
             
         }else if(theta<=M_PI && theta>=M_PI/3 ){
 
-            d=M_PI/2+3/4*(theta-M_PI/3);
+            d=(M_PI/2)+3.0/4*(theta-M_PI/3);
 
         }
         
@@ -92,6 +93,7 @@ cv::Mat ConvertColorSpace::convertToORGB(){
 
         vec=rotate_matrix*vec;
         
+        (*it)[0]=vec[0];
         (*it)[1]=vec[1];
         (*it)[2]=vec[2];
 
@@ -126,9 +128,9 @@ cv::Mat ConvertColorSpace::convertToRGB(){
      
         vec = inverse_transform_matrix *vec;
 
-        (*it)[0] = vec[0] * 255.0;
-        (*it)[1] = vec[1] * 255.0;
-        (*it)[2] = vec[2] * 255.0;
+        (*it)[0] = vec[0]*255;
+        (*it)[1] = vec[1]*255;
+        (*it)[2] = vec[2]*255;
        
     }
     
@@ -154,21 +156,23 @@ cv::Mat ConvertColorSpace::convertToRGB(){
         
         d=d-theta;
 
-        rotate_matrix(0,0) = cos(d);
-        rotate_matrix(0,1) = sin(d);
-        rotate_matrix(1,0) = -sin(d);
         rotate_matrix(1,1) = cos(d);
+        rotate_matrix(1,2) = -sin(d);
+        rotate_matrix(2,1) = sin(d);
+        rotate_matrix(2,2) = cos(d);
 
 
         Eigen::Vector3d vec{(*it)[0],(*it)[1],(*it)[2]};
 
         vec=rotate_matrix*vec;
         
-        (*it)[1]=vec[1];
-        (*it)[2]=vec[2];
+        (*it)[0]=vec[0]*255;
+        (*it)[1]=vec[1]*255;
+        (*it)[2]=vec[2]*255;
 
     }
 
     img.convertTo(img,CV_8UC3);
     return img;
 }
+
