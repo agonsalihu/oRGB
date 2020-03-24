@@ -1,7 +1,7 @@
 /**
  * @file ColorAdjustment.hpp
  * @author Agon Salihu (agon.salihu99@hotmail.com)
- * @brief 
+ * @brief Color Shading warm to cool
  * @version 0.1
  * @date 2020-03-22
  * 

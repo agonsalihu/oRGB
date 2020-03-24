@@ -23,23 +23,14 @@
  * @brief Class for converting image
  * 
  */
-class ConvertColorSpace{
+class ConvertColorSpace
+{
     private:
         /**
          * @brief Basic image
          * 
          */
         cv::Mat img;
-        /**
-         * @brief image in LCC color space
-         * 
-         */
-        cv::Mat normalized;
-        /**
-         * @brief image in RBG color space from LCC
-         * 
-         */
-        cv::Mat denormalizet;
         /**
          * @brief matrix for translate to LCC
          * 
@@ -55,12 +46,19 @@ class ConvertColorSpace{
                                                  {1.0000,0.1140,-0.4111},
                                                  {1.0000,-0.8860,0.1663}};
 
+        /**
+         * @brief 64b oRGB image
+         * 
+         */
+        cv::Mat oRGB;
+        
+
     public:
         /**
          * @brief Construct a new Convert Color Space object
          * 
          */
-        ConvertColorSpace(void);
+        ConvertColorSpace(void)=default;
         /**
          * @brief Construct a new Convert Color Space object
          * 
@@ -72,57 +70,66 @@ class ConvertColorSpace{
          * 
          */
         ~ConvertColorSpace()=default;
-
         /**
-         * @brief Set the Image object
-         * 
-         * @param m image
-         */
-        void setImage(cv::Mat m);
-        /**
-         * @brief Set the Normalized object
-         * 
-         * @param m Normalized Image
-         */
-        void setNormalized(cv::Mat m);
-        /**
-         * @brief Set the De Normalized object
+         * @brief Transforming image R'B'G'--> L'C'C'
          * 
          * @param m 
+         * @return cv::Mat 
          */
-        void setDeNormalized(cv::Mat m);
-
+        cv::Mat linearTransform(cv::Mat m);
         /**
-         * @brief Get the Image object
+         * @brief Rotate image L'C'C --> oRGB
+         * 
+         * @param m 
+         * @return cv::Mat 
+         */
+        cv::Mat rotateToORGB(cv::Mat m);
+        /**
+         * @brief Method for Converting colorspace from RGB to oRGB
+         * 
+         * @param m 
+         * @return cv::Mat 
+         */
+        cv::Mat convertToORGB(cv::Mat m);
+        /**
+         * @brief Transform from L'C'C to R'G'B
+         * 
+         * @param m 
+         * @return cv::Mat 
+         */
+        cv::Mat delinearTransform(cv::Mat m);
+        /**
+         * @brief Rotate from oRGB to L'C'C
+         * 
+         * @param m 
+         * @return cv::Mat 
+         */
+        cv::Mat rotateToRGB(cv::Mat m);
+        /**
+         * @brief method for converting color space from oRGB to RGB
          * 
          * @return cv::Mat 
          */
-        cv::Mat getImage();
+        cv::Mat convertToRGB(cv::Mat oRGB);
         /**
-         * @brief Get the Normalized object
-         * 
-         * @return cv::Mat 
-         */
-        cv::Mat getNormalized();
-        /**
-         * @brief Get the De Normalized object
-         * 
-         * @return cv::Mat 
-         */
-        cv::Mat getDeNormalized();
-        /**
-         * @brief method for converting color space to oRGB
-         * 
-         * @return cv::Mat 
-         */
-
-        cv::Mat convertToORGB();
-        /**
-         * @brief method for converting color space to RGB
+         * @brief method for converting colorspace of a given Image
          * 
          * @return cv::Mat 
          */
         cv::Mat convertToRGB();
-    
+        /**
+         * @brief Get the oRGB 64b image object
+         * 
+         * @return cv::Mat 
+         */
+        cv::Mat getImage64b();
+        /**
+         * @brief method for showing image turning from 64b to 8b
+         * 
+         * @param image 
+         * @return cv::Mat 
+         */
+        cv::Mat showImage(cv::Mat image);
+
 };
 #endif

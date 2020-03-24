@@ -49,7 +49,6 @@ include_directories(
 
 add_library(    
     ${PROJECT_NAME}
-    src/wrapper.cpp
     src/ConvertColorSpace.cpp
     src/ColorAdjustment.cpp
 )

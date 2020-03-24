@@ -1,4 +1,3 @@
-#include "wrapper.hpp"
 #include "ConvertColorSpace.hpp"
 #include "ColorAdjustment.hpp"
 
@@ -6,7 +5,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 
-int main(int argc,char **argv){
+int main(int argc,char **argv)
+{
     
     std::string path("/home/solaborate/Desktop/oRGB/img/lena.png");
 
@@ -19,33 +19,22 @@ int main(int argc,char **argv){
     cv::imshow("Result",img);
     
     cv::Mat res =  img.clone();
-    ConvertColorSpace ccs(res);
-    
-    //cv::cvtColor(res, res, cv::COLOR_BGR2RGB);
-    //res=ccs.convertToORGB();
-    //cv::cvtColor(res, res, cv::COLOR_RGB2BGR);
+    ConvertColorSpace ccs(img);
+    ColorAdjustment ca(img);
 
+    res=ccs.convertToORGB(res);
+    
     cv::namedWindow("oRGB",cv::WINDOW_FULLSCREEN);
     cv::imshow("oRGB",res);
     
-    ColorAdjustment ca(res);
+    res=ccs.getImage64b();
+    //res=ca.filter(Eigen::Vector2d{0,23});
 
-    res=ca.filter(Eigen::Vector2d{0,23});
+    res=ccs.convertToRGB(res);
 
-    cv::namedWindow("Filter");
-    cv::imshow("Filter",res);
-
-
-    //cv::Mat res1=res.clone();
-    //cv::cvtColor(res1, res1, cv::COLOR_BGR2RGB);
-    //ConvertColorSpace ccs1(res1);
-    //res1=ccs1.convertToRGB();
-    //cv::cvtColor(res1, res1, cv::COLOR_RGB2BGR);
-    //cv::namedWindow("RGB",cv::WINDOW_FULLSCREEN);
-    //cv::imshow("RGB",res1);
-
+    cv::namedWindow("RGB",cv::WINDOW_FULLSCREEN);
+    cv::imshow("RGB",res);
     
-
     std::cout<<"Press any key to close..."<<std::endl;
     cv::waitKey(0);
     cv::destroyAllWindows();
