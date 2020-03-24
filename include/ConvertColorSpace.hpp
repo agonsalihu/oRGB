@@ -131,5 +131,7 @@ class ConvertColorSpace
          */
         cv::Mat showImage(cv::Mat image);
 
+        void setoRGB(cv::Mat im);
+
 };
 #endif

@@ -79,7 +79,8 @@ cv::Mat ConvertColorSpace::rotateToORGB(cv::Mat image)
         
     }
     
-    this->oRGB=image;
+    setoRGB(image);
+    
     return image;
 }
 
@@ -236,9 +237,16 @@ cv::Mat ConvertColorSpace::convertToRGB(cv::Mat image)
 }
 
 cv::Mat ConvertColorSpace::getImage64b()
-{
+{   
 
     return this->oRGB;
 
+}
+
+void ConvertColorSpace::setoRGB(cv::Mat image)
+{
+    
+    this->oRGB=image;
+    
 }
 

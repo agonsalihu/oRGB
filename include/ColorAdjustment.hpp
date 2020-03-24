@@ -66,6 +66,6 @@ class ColorAdjustment{
          * @param vec Vector with 2 values one for Crg, one for Cyb
          * @return cv::Mat Filtered Image
          */
-        cv::Mat filter(Eigen::Vector2d vec);
+        cv::Mat filter(cv::Mat image,Eigen::Vector2d vec);
 };
 #endif

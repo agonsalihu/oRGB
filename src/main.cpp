@@ -28,7 +28,7 @@ int main(int argc,char **argv)
     cv::imshow("oRGB",res);
     
     res=ccs.getImage64b();
-    //res=ca.filter(Eigen::Vector2d{0,23});
+    res=ca.filter(res,Eigen::Vector2d{0,23});
 
     res=ccs.convertToRGB(res);
 
