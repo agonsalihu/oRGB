@@ -110,19 +110,7 @@ class ConvertColorSpace
          * 
          * @return cv::Mat 
          */
-        cv::Mat convertToRGB(cv::Mat oRGB);
-        /**
-         * @brief method for converting colorspace of a given Image
-         * 
-         * @return cv::Mat 
-         */
         cv::Mat convertToRGB();
-        /**
-         * @brief Get the oRGB 64b image object
-         * 
-         * @return cv::Mat 
-         */
-        cv::Mat getImage64b();
         /**
          * @brief method for showing image turning from 64b to 8b
          * 
@@ -131,7 +119,13 @@ class ConvertColorSpace
          */
         cv::Mat showImage(cv::Mat image);
 
-        void setoRGB(cv::Mat im);
+        /**
+         * @brief Applying values to change Crg and Cby
+         * 
+         * @param vec 
+         * @return cv::Mat 
+         */
+        cv::Mat filter(Eigen::Vector2d vec);
 
 };
 #endif

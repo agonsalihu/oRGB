@@ -11,7 +11,7 @@ cv::Mat ConvertColorSpace::linearTransform(cv::Mat image)
     cv::MatIterator_<cv::Vec3d> it,end;
 
     float gamma=2.2f;
-    float gammaCorrection=1/gamma;
+    float gammaCorrection=1.0/gamma;
 
     for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
     {
@@ -79,7 +79,7 @@ cv::Mat ConvertColorSpace::rotateToORGB(cv::Mat image)
         
     }
     
-    setoRGB(image);
+    this->oRGB=image;
     
     return image;
 }
@@ -204,10 +204,10 @@ cv::Mat ConvertColorSpace::delinearTransform(cv::Mat image)
 
 }
 
+
 cv::Mat ConvertColorSpace::convertToRGB()
 {
-
-    cv:: Mat image=getImage64b();
+    cv::Mat image=this->oRGB;
     
     image=rotateToRGB(image);
 
@@ -221,32 +221,21 @@ cv::Mat ConvertColorSpace::convertToRGB()
 
 }
 
-cv::Mat ConvertColorSpace::convertToRGB(cv::Mat image)
+cv::Mat ConvertColorSpace::filter(Eigen::Vector2d vec)
 {
+    cv::Mat image=this->oRGB;
 
-    image=rotateToRGB(image);
+    cv::MatIterator_<cv::Vec3d> it,end;
 
-    image=delinearTransform(image);
-    
-    image.convertTo(image,CV_8UC3);
+    for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
+    {   
+        
+        (*it)[2] -= vec[0];
+        (*it)[1] -= vec[1];
+        
+    }
 
-    cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
-    
     return image;
 
-}
-
-cv::Mat ConvertColorSpace::getImage64b()
-{   
-
-    return this->oRGB;
-
-}
-
-void ConvertColorSpace::setoRGB(cv::Mat image)
-{
-    
-    this->oRGB=image;
-    
 }
 

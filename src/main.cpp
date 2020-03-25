@@ -27,10 +27,9 @@ int main(int argc,char **argv)
     cv::namedWindow("oRGB",cv::WINDOW_FULLSCREEN);
     cv::imshow("oRGB",res);
     
-    res=ccs.getImage64b();
-    res=ca.filter(res,Eigen::Vector2d{0,23});
+    res=ccs.filter(Eigen::Vector2d{0,23});
 
-    res=ccs.convertToRGB(res);
+    res=ccs.convertToRGB();
 
     cv::namedWindow("RGB",cv::WINDOW_FULLSCREEN);
     cv::imshow("RGB",res);
