@@ -26,11 +26,13 @@
 class ConvertColorSpace
 {
     private:
+
         /**
          * @brief Basic image
          * 
          */
         cv::Mat img;
+
         /**
          * @brief matrix for translate to LCC
          * 
@@ -38,6 +40,7 @@ class ConvertColorSpace
         Eigen::Matrix3d transform_matrix{{0.2990,0.5870,0.1140},
                                          {0.5000,0.5000,-1.0000},
                                          {0.8660,-0.8660,0.0000}};
+       
         /**
          * @brief matrix for translate to RGB
          * 
@@ -52,24 +55,27 @@ class ConvertColorSpace
          */
         cv::Mat oRGB;
         
-
     public:
+        
         /**
          * @brief Construct a new Convert Color Space object
          * 
          */
         ConvertColorSpace(void)=default;
+        
         /**
          * @brief Construct a new Convert Color Space object
          * 
          * @param m Construct a new Convert Color Space object intializing image
          */
         ConvertColorSpace(cv::Mat m);
+        
         /**
          * @brief Destroy the Convert Color Space object
          * 
          */
         ~ConvertColorSpace()=default;
+       
         /**
          * @brief Transforming image R'B'G'--> L'C'C'
          * 
@@ -77,6 +83,7 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat linearTransform(cv::Mat m);
+       
         /**
          * @brief Rotate image L'C'C --> oRGB
          * 
@@ -84,6 +91,7 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat rotateToORGB(cv::Mat m);
+        
         /**
          * @brief Method for Converting colorspace from RGB to oRGB
          * 
@@ -91,6 +99,7 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat convertToORGB(cv::Mat m);
+        
         /**
          * @brief Transform from L'C'C to R'G'B
          * 
@@ -98,6 +107,7 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat delinearTransform(cv::Mat m);
+       
         /**
          * @brief Rotate from oRGB to L'C'C
          * 
@@ -105,12 +115,14 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat rotateToRGB(cv::Mat m);
+        
         /**
          * @brief method for converting color space from oRGB to RGB
          * 
          * @return cv::Mat 
          */
         cv::Mat convertToRGB();
+        
         /**
          * @brief method for showing image turning from 64b to 8b
          * 
@@ -126,6 +138,20 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat filter(Eigen::Vector2d vec);
+
+        /**
+         * @brief Set the Image64b object
+         * 
+         * @param i 
+         */
+        void setImage64b(cv::Mat i);
+
+        /**
+         * @brief Get the Image64b object
+         * 
+         * @return cv::Mat 
+         */
+        cv::Mat getImage64b();
 
 };
 #endif

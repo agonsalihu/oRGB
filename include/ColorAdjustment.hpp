@@ -37,17 +37,20 @@ class ColorAdjustment{
          * 
          */
         ColorAdjustment(void)=default;
+       
         /**
          * @brief Construct a new Color Adjustment object
          * 
          * @param m sets image for color adjusting
          */
         ColorAdjustment(cv::Mat m);
+        
         /**
          * @brief Destroy the Color Adjustment object
          * 
          */
         ~ColorAdjustment()=default;
+        
         /**
          * @brief Set the Image object
          * 
@@ -60,12 +63,6 @@ class ColorAdjustment{
          * @return cv::Mat basic image
          */
         cv::Mat getImage();
-        /**
-         * @brief Method for color shading cool to warm(changing Crg and Cyb values)
-         * 
-         * @param vec Vector with 2 values one for Crg, one for Cyb
-         * @return cv::Mat Filtered Image
-         */
-        cv::Mat filter(cv::Mat image,Eigen::Vector2d vec);
+        
 };
 #endif

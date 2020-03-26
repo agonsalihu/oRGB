@@ -1,22 +1,11 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
-</p>
+
 
 <h3 align="center">oRGB</h3>
 
-<div align="center">
-
-![Status](https://img.shields.io/badge/status-active-success.svg)
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
-
-</div>
 
 ---
 
-<p align="center"> Change ColorSpace from RGB to oRGB and inverse. Apply color adjustment for shading from warm to cool.
+<p align="center"> Changing RGB color space to new oRGB 
     <br> 
 </p>
 
@@ -24,50 +13,94 @@
 
 - [About](#about)
 - [Getting Started](#getting_started)
-
+- [Usage](#usage)
+- [Built Using](#built_using)
+- [Authors](#authors)
 
 
 ## 🧐 About <a name = "about"></a>
 
-Project is programming a new colorspace for computer graphics
+A new color model, oRGB, that is based on opponentcolor  theory.   Like  HSV,  it  is  designed  specifically  for  computergraphics.  However, it is also designed to work well for computa-tional applications such as color transfer, where HSV falters.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
+
+
 ### Prerequisites
 
-You need to have these libraries to be able to run this project:
-Eigen3,
-OpenCV2,
-GTests
+What things you need to install the software and how to install them.
 
-```
-Give examples
-```
+- [CMake](https://cmake.org/install/) - Build process Framework
+- [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) - Math Framework
+- [OpenCV](https://www.learnopencv.com/install-opencv-4-on-ubuntu-18-04/) - Image Processing Framework
+- [GoogleTest](https://github.com/google/googletest) - Test Framework
+- [Doxygen](http://www.doxygen.nl/)- Standard tool for generating documentation from annotated C++ sources
 
 ### Installing
 
+A step by step series of examples that tell you how to get a development env running.
 
-
-First step 
-
-```
-doxygen -g doxyfile
-```
-
-Then
+First clone from GitHub
 
 ```
-mkdir build
-cd build
-cmake ..
-make 
-../build/oRGB_exec
+git clone https://github.com/agonsalihu/oRGB.git
 ```
 
+And then open oRGB dictionary and create new dictionary
+
+```
+cd oRGB/
+~/oRGB$ mkdir build
+```
+Create documentation on that dictionary
+
+```
+~/oRGB$ doxygen doxyfile
+```
+And than, go to build and make
+```
+~/oRGB$ cd build/
+~/oRGB/build$ cmake ..
+~/oRGB/build$ make
+
+```
+
+End with an example of getting some data out of the system or using it for a little demo.
 
 ## 🔧 Running the tests <a name = "tests"></a>
 
-N/A
+To run the project first in main.cpp you have to change image path. According to your path
+```
+std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+```
+
+### Execute
+
+To execute on terminal in build dictionary write this command
+
+```
+~/oRGB/build$ ../build/oRGB_exec
+```
+
+
+## 🎈 Usage <a name="usage"></a>
+
+This projects is used for color adjustement of an image from cool to warm, using oRGB color space 
+
+
+## ⛏️ Built Using <a name = "built_using"></a>
+
+- [CMake](https://cmake.org/) - Build process Framework
+- [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) - Math Framework
+- [OpenCV](https://opencv.org/) - Image Processing Framework
+- [GoogleTest](https://github.com/google/googletest) - Test Framework
+- [Doxygen](http://www.doxygen.nl/)- Standard tool for generating documentation from annotated C++ sources
+
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@agonsalihu](https://github.com/agonsalihu) - Coding
+
 
