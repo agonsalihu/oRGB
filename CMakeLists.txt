@@ -64,4 +64,6 @@ target_link_libraries(
     ${OpenCV_LIBRARIES}
 )
 
-#add_subdirectory(test)
+enable_testing()
+
+add_subdirectory(test)

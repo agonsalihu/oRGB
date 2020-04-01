@@ -54,9 +54,13 @@ class ConvertColorSpace
          * 
          */
         cv::Mat oRGB;
+
+        cv::Mat afterFilter;
         
     public:
         
+        enum Color {L=0,Crg=1,Cyb=2};
+
         /**
          * @brief Construct a new Convert Color Space object
          * 
@@ -137,14 +141,14 @@ class ConvertColorSpace
          * @param vec 
          * @return cv::Mat 
          */
-        cv::Mat filter(Eigen::Vector2d vec);
+        cv::Mat filter(cv::Mat image,Eigen::Vector2d vec);
 
         /**
          * @brief Set the Image64b object
          * 
          * @param i 
          */
-        void setImage64b(cv::Mat i);
+        bool setImage64b(cv::Mat i);
 
         /**
          * @brief Get the Image64b object
@@ -152,6 +156,44 @@ class ConvertColorSpace
          * @return cv::Mat 
          */
         cv::Mat getImage64b();
+
+        /**
+         * @brief Set the After F Ilter object
+         * 
+         * @param i 
+         */
+        bool setAfterFilter(cv::Mat i);
+
+        /**
+         * @brief Get the After Filter object
+         * 
+         * @return cv::Mat 
+         */
+        cv::Mat getAfterFilter();
+
+        /**
+         * @brief Set the Image object
+         * 
+         * @param i 
+         * @return true 
+         * @return false 
+         */
+        bool setImage(cv::Mat i);
+
+        /**
+         * @brief Get the Image object
+         * 
+         * @return cv::Mat 
+         */
+        cv::Mat getImage();
+
+        /**
+         * @brief Method for extracting a channel with enum color{Crg,Cyb,L}
+         * 
+         * @param image
+         * @return cv::Mat 
+         */
+        cv::Mat extract(cv::Mat image,Color);
 
 };
 #endif

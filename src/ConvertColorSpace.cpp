@@ -2,249 +2,259 @@
 
 ConvertColorSpace::ConvertColorSpace(cv::Mat m)
 {
-    this->img=m;
+    this->img = m;
 }
 
 cv::Mat ConvertColorSpace::linearTransform(cv::Mat image)
 {
 
-    cv::MatIterator_<cv::Vec3d> it,end;
+    cv::MatIterator_<cv::Vec3d> it, end;
 
-    double gamma=2.2f;
-    double gammaCorrection=1.0/gamma;
+    double gamma = 2.2f;
+    double gammaCorrection = 1.0 / gamma;
 
-    for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
+    for (it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
     {
 
-        (*it)[0] = pow((static_cast <double>((*it)[0]) / 255.0 ),gammaCorrection); 
-        (*it)[1] = pow((static_cast <double>((*it)[1]) / 255.0 ),gammaCorrection); 
-        (*it)[2] = pow((static_cast <double>((*it)[2]) / 255.0 ),gammaCorrection);         
-    
-        Eigen::Vector3d vec{(*it)[0],(*it)[1],(*it)[2]};
-     
-        vec = transform_matrix *vec;
+        (*it)[0] = pow((static_cast<double>((*it)[0]) / 255.0), gammaCorrection);
+        (*it)[1] = pow((static_cast<double>((*it)[1]) / 255.0), gammaCorrection);
+        (*it)[2] = pow((static_cast<double>((*it)[2]) / 255.0), gammaCorrection);
+
+        Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
+
+        vec = transform_matrix * vec;
 
         (*it)[0] = vec[0];
         (*it)[1] = vec[1];
         (*it)[2] = vec[2];
-       
     }
-    
-    return image;
-    
+
+    return image.clone();
 }
 
 cv::Mat ConvertColorSpace::rotateToORGB(cv::Mat image)
 {
 
-    cv::MatIterator_<cv::Vec3d> it,end;
+    cv::MatIterator_<cv::Vec3d> it, end;
 
-    Eigen::Matrix3d rotate_matrix{{1,0,0},
-                                  {0,1,0},
-                                  {0,0,1}};
-    
-    for(it=image.begin<cv::Vec3d>();it!=image.end<cv::Vec3d>();it++)
+    Eigen::Matrix3d rotate_matrix{{1, 0, 0},
+                                  {0, 1, 0},
+                                  {0, 0, 1}};
+
+    for (it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); it++)
     {
-        
-        double theta=atan2((*it)[2],(*it)[1]);
 
-        double d=0.0f;
+        double theta = atan2((*it)[2], (*it)[1]);
 
-        if(theta<M_PI/3.0)
-        {
-            
-            d=(double)3.0/2.0*theta;
-            
-        }else if(theta<=M_PI && theta>=M_PI/3.0 )
+        double d = 0.0f;
+
+        if (theta < M_PI / 3.0)
         {
 
-            d=(M_PI/2)+3.0/4.0*(theta-M_PI/3.0);
-
+            d = (double)3.0 / 2.0 * theta;
         }
-        
-        d=d-theta;
+        else if (theta <= M_PI && theta >= M_PI / 3.0)
+        {
 
-        rotate_matrix(1,1) = cos(d);
-        rotate_matrix(1,2) = -sin(d);
-        rotate_matrix(2,1) = sin(d);
-        rotate_matrix(2,2) = cos(d);
-        
-        Eigen::Vector3d vec{(*it)[0],(*it)[1],(*it)[2]};
+            d = (M_PI / 2) + 3.0 / 4.0 * (theta - M_PI / 3.0);
+        }
 
-        vec=rotate_matrix*vec;
-                
-        (*it)[0]=vec[0];
-        (*it)[1]=vec[1];
-        (*it)[2]=vec[2];
-        
+        d = d - theta;
+
+        rotate_matrix(1, 1) = cos(d);
+        rotate_matrix(1, 2) = -sin(d);
+        rotate_matrix(2, 1) = sin(d);
+        rotate_matrix(2, 2) = cos(d);
+
+        Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
+
+        vec = rotate_matrix * vec;
+
+        (*it)[0] = vec[0];
+        (*it)[1] = vec[1];
+        (*it)[2] = vec[2];
     }
-    
-    setImage64b(image);
-    
-    return image;
+
+    setImage64b(image.clone());
+
+    return image.clone();
 }
 
 cv::Mat ConvertColorSpace::showImage(cv::Mat image)
 {
-    
-    cv::MatIterator_<cv::Vec3d> it,end;
 
-    for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
+    cv::MatIterator_<cv::Vec3d> it, end;
+
+    for (it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
     {
-       
+
         (*it)[0] = (*it)[0] * 255;
         (*it)[1] = (*it)[1] * 255;
         (*it)[2] = (*it)[2] * 255;
-        
     }
 
-    image.convertTo(image,CV_8UC3);
+    image.convertTo(image, CV_8UC3);
 
-    cv::cvtColor(image, image, cv::COLOR_RGB2BGR); 
-    
-    return image;
+    cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
+
+    return image.clone();
 }
 
 cv::Mat ConvertColorSpace::convertToORGB(cv::Mat image)
 {
-    
-    cv::cvtColor(image,image, cv::COLOR_BGR2RGB);
 
-    image.convertTo(image,CV_64FC3);
-    
-    image=linearTransform(image);
-    
-    image=rotateToORGB(image);
+    cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
 
-    image=showImage(image);
+    image.convertTo(image, CV_64FC3);
 
-    return image;
+    image = linearTransform(image);
 
+    image = rotateToORGB(image);
+
+    image = showImage(image);
+
+    return image.clone();
 }
 
 cv::Mat ConvertColorSpace::rotateToRGB(cv::Mat image)
 {
 
-    cv::MatIterator_<cv::Vec3d> it,end;
+    cv::MatIterator_<cv::Vec3d> it, end;
 
-    Eigen::Matrix3d rotate_matrix{{1,0,0},
-                                  {0,1,0},
-                                  {0,0,1}};
+    Eigen::Matrix3d rotate_matrix{{1, 0, 0},
+                                  {0, 1, 0},
+                                  {0, 0, 1}};
 
-    double gamma=2.2;
-    double gammaCorrection=1.0/gamma;
-
-    for(it=image.begin<cv::Vec3d>();it!=image.end<cv::Vec3d>();it++)
+    for (it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); it++)
     {
-        
-        double theta=atan2((*it)[2],(*it)[1]);
 
-        double d=0.0f;
+        double theta = atan2((*it)[2], (*it)[1]);
 
-        if(theta<M_PI/2)
-        {
-            
-            d=(double)2.0/3*theta;
-            
-        }else if(theta<=M_PI && theta>=M_PI/2 )
+        double d = 0.0f;
+
+        if (theta < M_PI / 2)
         {
 
-            d=M_PI/3+4.0/3*(theta-M_PI/2);
-
+            d = (double)2.0 / 3 * theta;
         }
-        
-        d=d-theta;
+        else if (theta <= M_PI && theta >= M_PI / 2)
+        {
 
-        rotate_matrix(1,1) = cos(d);
-        rotate_matrix(1,2) = -sin(d);
-        rotate_matrix(2,1) = sin(d);
-        rotate_matrix(2,2) = cos(d);
+            d = M_PI / 3 + 4.0 / 3 * (theta - M_PI / 2);
+        }
 
-        Eigen::Vector3d vec{(*it)[0],(*it)[1],(*it)[2]};
+        d = d - theta;
 
-        vec=rotate_matrix*vec;
-        
-        (*it)[0]=vec[0];
-        (*it)[1]=vec[1];
-        (*it)[2]=vec[2];
+        rotate_matrix(1, 1) = cos(d);
+        rotate_matrix(1, 2) = -sin(d);
+        rotate_matrix(2, 1) = sin(d);
+        rotate_matrix(2, 2) = cos(d);
 
+        Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
+
+        vec = rotate_matrix * vec;
+
+        (*it)[0] = vec[0];
+        (*it)[1] = vec[1];
+        (*it)[2] = vec[2];
     }
 
-    return image;
-
+    return image.clone();
 }
 
 cv::Mat ConvertColorSpace::delinearTransform(cv::Mat image)
 {
 
-    cv::MatIterator_<cv::Vec3d> it,end;
+    cv::MatIterator_<cv::Vec3d> it, end;
 
-    double gamma=2.2f;
-    double gammaCorrection=1/gamma;
+    double gamma = 2.2f;
+    double gammaCorrection = 1 / gamma;
 
-    for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
+    for (it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
     {
-        
-        Eigen::Vector3d vec{(*it)[0],(*it)[1],(*it)[2]};
-     
-        vec = inverse_transform_matrix *vec;
 
-        (*it)[0] = vec[0]*255;
-        (*it)[1] = vec[1]*255;
-        (*it)[2] = vec[2]*255;
+        Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
 
-        (*it)[0] = pow((static_cast <double>((*it)[0]) / 255.0 ),gamma)*255; 
-        (*it)[1] = pow((static_cast <double>((*it)[1]) / 255.0 ),gamma)*255; 
-        (*it)[2] = pow((static_cast <double>((*it)[2]) / 255.0 ),gamma)*255;
-        
+        vec = inverse_transform_matrix * vec;
+
+        (*it)[0] = vec[0] * 255;
+        (*it)[1] = vec[1] * 255;
+        (*it)[2] = vec[2] * 255;
+
+        (*it)[0] = pow((static_cast<double>((*it)[0]) / 255.0), gamma) * 255;
+        (*it)[1] = pow((static_cast<double>((*it)[1]) / 255.0), gamma) * 255;
+        (*it)[2] = pow((static_cast<double>((*it)[2]) / 255.0), gamma) * 255;
     }
- 
-    return image;
 
+    return image.clone();
 }
-
 
 cv::Mat ConvertColorSpace::convertToRGB()
 {
-    cv::Mat image=getImage64b();
-    
-    image=rotateToRGB(image);
+    cv::Mat image = getAfterFilter().clone();
 
-    image=delinearTransform(image);
-    
-    image.convertTo(image,CV_8UC3);
+    image = rotateToRGB(image);
+
+    image = delinearTransform(image);
+
+    image.convertTo(image, CV_8UC3);
 
     cv::cvtColor(image, image, cv::COLOR_RGB2BGR);
-    
-    return image;
 
+    return image;
 }
 
-cv::Mat ConvertColorSpace::filter(Eigen::Vector2d vec)
+cv::Mat ConvertColorSpace::filter(cv::Mat image, Eigen::Vector2d vec)
 {
-    cv::Mat image=getImage64b();
-    cv::MatIterator_<cv::Vec3d> it,end;
+    cv::Mat fil = image.clone();
+    cv::MatIterator_<cv::Vec3d> it, end;
 
-    for(it = image.begin<cv::Vec3d>(); it != image.end<cv::Vec3d>(); ++it)
-    {   
-        //(*it)[0]=0;   //L
-        //(*it)[1]=0;   //Crg
-        //(*it)[2]=0;   //Cby
+    for (it = fil.begin<cv::Vec3d>(); it != fil.end<cv::Vec3d>(); ++it)
+    {
 
+        if ((*it)[2] - vec[0] < -1)
+        {
 
-        (*it)[2] -= vec[0];
-        (*it)[1] -= vec[1];
-        
+            (*it)[2] = (-1.0);
+        }
+        else if ((*it)[2] - vec[0] > 1)
+        {
+
+            (*it)[2] = 1.0;
+        }
+        else
+        {
+
+            (*it)[2] = vec[0];
+        }
+
+        if ((*it)[1] - vec[1] < -1)
+        {
+
+            (*it)[1] = (-1.0);
+        }
+        else if ((*it)[1] - vec[1] < -1)
+        {
+
+            (*it)[1] = 1.0;
+        }
+        else
+        {
+
+            (*it)[1] -= vec[1];
+        }
     }
-    
-    return image;
 
+    setAfterFilter(fil.clone());
+    return fil.clone();
 }
 
-void ConvertColorSpace::setImage64b(cv::Mat i)
+bool ConvertColorSpace::setImage64b(cv::Mat i)
 {
-    i.convertTo(i,CV_64FC3);
-    this->oRGB=i.clone();
+    i.convertTo(i, CV_64FC3);
+    this->oRGB = i.clone();
+
+    return true;
 }
 
 cv::Mat ConvertColorSpace::getImage64b()
@@ -252,3 +262,69 @@ cv::Mat ConvertColorSpace::getImage64b()
     return this->oRGB;
 }
 
+bool ConvertColorSpace::setAfterFilter(cv::Mat i)
+{
+    i.convertTo(i, CV_64FC3);
+    this->afterFilter = i.clone();
+
+    return true;
+}
+
+cv::Mat ConvertColorSpace::getAfterFilter()
+{
+    return this->afterFilter;
+}
+
+bool ConvertColorSpace::setImage(cv::Mat i)
+{
+    this->img = i.clone();
+
+    return true;
+}
+
+cv::Mat ConvertColorSpace::getImage()
+{
+    return this->img;
+}
+
+cv::Mat ConvertColorSpace::extract(cv::Mat image, ConvertColorSpace::Color color)
+{
+    cv::Mat test = image.clone();
+
+    cv::MatIterator_<cv::Vec3d> it, end;
+
+    switch (color)
+    {
+    case Crg:
+        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        {
+            //(*it)[0] = 0; //L
+            (*it)[1] = 0; //Crg
+            //(*it)[2]=0;   //Cby
+        }
+        break;
+
+    case Cyb:
+        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        {
+            //(*it)[0] = 0; //L
+            //(*it)[1] = 0; //Crg
+            (*it)[2] = 0; //Cby
+        }
+        break;
+    case L:
+        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        {
+            //(*it)[0] = 0; //L
+            (*it)[1] = 0; //Crg
+            (*it)[2] = 0; //Cby
+        }
+        break;
+    default:
+        break;
+    }
+
+    setAfterFilter(test.clone());
+
+    return test.clone();
+}
