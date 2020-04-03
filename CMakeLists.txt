@@ -58,6 +58,10 @@ add_executable(
     src/main.cpp
 )
 
+add_definitions(
+    -D ROOT_PATH=${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 target_link_libraries(
     ${PROJECT_NAME}_exec
     ${PROJECT_NAME}

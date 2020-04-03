@@ -7,10 +7,8 @@
  * 
  */
 TEST_F(ConvertColorSpaceTest, SetImage)
-{
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
-
+{   
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     EXPECT_TRUE(ccs.setImage(img));
 }
 
@@ -20,8 +18,7 @@ TEST_F(ConvertColorSpaceTest, SetImage)
  */
 TEST_F(ConvertColorSpaceTest, GetImage)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img =cv::imread(path,cv::IMREAD_COLOR);
+    cv::Mat img =cv::imread(getPath(),cv::IMREAD_COLOR);
     img.convertTo(img, CV_64FC3);
     ccs.setImage(img);
     cv::Mat test = ccs.getImage().clone();
@@ -44,8 +41,7 @@ TEST_F(ConvertColorSpaceTest, GetImage)
  */
 TEST_F(ConvertColorSpaceTest, LinearTransform)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -94,8 +90,7 @@ TEST_F(ConvertColorSpaceTest, LinearTransform)
  */
 TEST_F(ConvertColorSpaceTest, Rotate)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -159,8 +154,7 @@ TEST_F(ConvertColorSpaceTest, Rotate)
  */
 TEST_F(ConvertColorSpaceTest, ConvertToORGB)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -248,8 +242,7 @@ TEST_F(ConvertColorSpaceTest, ConvertToORGB)
  */
 TEST_F(ConvertColorSpaceTest, RotateToRGB)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -310,8 +303,7 @@ TEST_F(ConvertColorSpaceTest, RotateToRGB)
 /*
 TEST_F(ConvertColorSpaceTest, DeLinearTransform)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -358,8 +350,7 @@ TEST_F(ConvertColorSpaceTest, DeLinearTransform)
 
 TEST_F(ConvertColorSpaceTest, Convert_To_RGB)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -449,8 +440,7 @@ TEST_F(ConvertColorSpaceTest, Convert_To_RGB)
  */
 TEST_F(ConvertColorSpaceTest, Filter)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
@@ -515,8 +505,7 @@ TEST_F(ConvertColorSpaceTest, Filter)
  */
 TEST_F(ConvertColorSpaceTest, Extract)
 {
-    const std::string path("../../img/test.png");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::Mat img = cv::imread(getPath(), cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
