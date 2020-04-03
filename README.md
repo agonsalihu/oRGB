@@ -64,16 +64,19 @@ And than, go to build and make
 ~/oRGB$ cd build/
 ~/oRGB/build$ cmake ..
 ~/oRGB/build$ make
-
 ```
 
 End with an example of getting some data out of the system or using it for a little demo.
 
 ## 🔧 Running the tests <a name = "tests"></a>
-
-To run the project first in main.cpp you have to change image path. According to your path
+To make and run tests, go to build
 ```
-std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+~/oRGB$ cd build/
+~/oRGB/build$ ctest make
+```
+or, for more detailed tests
+```
+~/oRGB$ cd build/ctest --verbose
 ```
 
 ### Execute
@@ -102,5 +105,6 @@ This projects is used for color adjustement of an image from cool to warm, using
 ## ✍️ Authors <a name = "authors"></a>
 
 - [@agonsalihu](https://github.com/agonsalihu) - Coding
+- [@jimmyhalimi](https://github.com/jimmyhalimi) - Supervisor
 
 

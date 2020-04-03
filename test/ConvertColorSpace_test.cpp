@@ -1,47 +1,50 @@
 #include "ConvertColorSpace_test.hpp"
 
+
+
+/**
+ * @brief Construct a new test f object for Image Set
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, SetImage)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
 
     EXPECT_TRUE(ccs.setImage(img));
 }
 
+/**
+ * @brief Construct a new test f object to Get Base Image
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, GetImage)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
-    cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    const std::string path("../../img/test.png");
+    cv::Mat img =cv::imread(path,cv::IMREAD_COLOR);
     img.convertTo(img, CV_64FC3);
     ccs.setImage(img);
-    cv::Mat test = ccs.getImage();
+    cv::Mat test = ccs.getImage().clone();
     test.convertTo(test, CV_64FC3);
 
     cv::MatIterator_<cv::Vec3d> it, it1;
-    Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 
+/**
+ * @brief Construct a new test f object for Linear Transformation
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, LinearTransform)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -75,30 +78,23 @@ TEST_F(ConvertColorSpaceTest, LinearTransform)
 
     test = ccs.linearTransform(test);
 
-    Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 
+/**
+ * @brief Construct a new test f object for Rotate ColorSpace to oRGB
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, Rotate)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -131,10 +127,10 @@ TEST_F(ConvertColorSpaceTest, Rotate)
 
         d = d - theta;
 
-        rotate_matrix(1, 1) = cos(d);
-        rotate_matrix(1, 2) = -sin(d);
-        rotate_matrix(2, 1) = sin(d);
-        rotate_matrix(2, 2) = cos(d);
+        rotate_matrix(1, 1) = cos(d* M_PI/180);
+        rotate_matrix(1, 2) = -sin(d* M_PI/180);
+        rotate_matrix(2, 1) = sin(d* M_PI/180);
+        rotate_matrix(2, 2) = cos(d* M_PI/180);
 
         Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
 
@@ -147,30 +143,23 @@ TEST_F(ConvertColorSpaceTest, Rotate)
 
     test = ccs.rotateToORGB(test);
 
-    Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
-    {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
+    {        
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 
+/**
+ * @brief Construct a new test f object for converting to oRGB
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, ConvertToORGB)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -226,10 +215,10 @@ TEST_F(ConvertColorSpaceTest, ConvertToORGB)
 
         d = d - theta;
 
-        rotate_matrix(1, 1) = cos(d);
-        rotate_matrix(1, 2) = -sin(d);
-        rotate_matrix(2, 1) = sin(d);
-        rotate_matrix(2, 2) = cos(d);
+        rotate_matrix(1, 1) = cos(d* M_PI/180);
+        rotate_matrix(1, 2) = -sin(d* M_PI/180);
+        rotate_matrix(2, 1) = sin(d* M_PI/180);
+        rotate_matrix(2, 2) = cos(d* M_PI/180);
 
         Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
 
@@ -243,30 +232,23 @@ TEST_F(ConvertColorSpaceTest, ConvertToORGB)
     test = ccs.linearTransform(test);
     test = ccs.rotateToORGB(test);
 
-    Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 
+/**
+ * @brief Construct a new test f object for rotating image to RGB
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, RotateToRGB)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -299,10 +281,10 @@ TEST_F(ConvertColorSpaceTest, RotateToRGB)
 
         d = d - theta;
 
-        rotate_matrix(1, 1) = cos(d);
-        rotate_matrix(1, 2) = -sin(d);
-        rotate_matrix(2, 1) = sin(d);
-        rotate_matrix(2, 2) = cos(d);
+        rotate_matrix(1, 1) = cos(d* M_PI/180);
+        rotate_matrix(1, 2) = -sin(d* M_PI/180);
+        rotate_matrix(2, 1) = sin(d* M_PI/180);
+        rotate_matrix(2, 2) = cos(d* M_PI/180);
 
         Eigen::Vector3d vec{(*it)[0], (*it)[1], (*it)[2]};
 
@@ -316,42 +298,33 @@ TEST_F(ConvertColorSpaceTest, RotateToRGB)
     test = ccs.rotateToRGB(test);
 
     Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
-
+/*
 TEST_F(ConvertColorSpaceTest, DeLinearTransform)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+    cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
     cv::Mat test = img.clone();
     test.convertTo(test, CV_64FC3);
-
-    Eigen::Matrix3d inverse_transform_matrix{{1.0000, 0.1140, 0.7436},
-                                             {1.0000, 0.1140, -0.4111},
-                                             {1.0000, -0.8860, 0.1663}};
 
     cv::MatIterator_<cv::Vec3d> it, it1, end;
 
     double gamma = 2.2f;
     double gammaCorrection = 1 / gamma;
+
+    Eigen::Matrix3d inverse_transform_matrix{{1.0000, 0.1140, 0.7436},
+                                             {1.0000, 0.1140, -0.4111},
+                                             {1.0000, -0.8860, 0.1663}};
 
     for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
     {
@@ -360,41 +333,32 @@ TEST_F(ConvertColorSpaceTest, DeLinearTransform)
 
         vec = inverse_transform_matrix * vec;
 
-        (*it)[0] = vec[0] * 255;
-        (*it)[1] = vec[1] * 255;
-        (*it)[2] = vec[2] * 255;
+        (*it)[0] = vec[0];
+        (*it)[1] = vec[1];
+        (*it)[2] = vec[2];
 
-        (*it)[0] = pow((static_cast<double>((*it)[0]) / 255.0), gamma) * 255;
-        (*it)[1] = pow((static_cast<double>((*it)[1]) / 255.0), gamma) * 255;
-        (*it)[2] = pow((static_cast<double>((*it)[2]) / 255.0), gamma) * 255;
+        (*it)[0] = pow((static_cast<double>((*it)[0])), gamma) * 255;
+        (*it)[1] = pow((static_cast<double>((*it)[1])), gamma) * 255;
+        (*it)[2] = pow((static_cast<double>((*it)[2])), gamma) * 255;
     }
 
-    test = ccs.delinearTransform(test);
+    test=ccs.delinearTransform(test);
 
     Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 1000.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 1000.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 1000.01);
     }
 }
+
 
 TEST_F(ConvertColorSpaceTest, Convert_To_RGB)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -468,29 +432,24 @@ TEST_F(ConvertColorSpaceTest, Convert_To_RGB)
     test = ccs.delinearTransform(test);
 
     Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
+*/
 
+/**
+ * @brief Construct a new test f object for Filter oRGB 
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, Filter)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -500,7 +459,7 @@ TEST_F(ConvertColorSpaceTest, Filter)
     cv::MatIterator_<cv::Vec3d> it, it1, end;
 
     Eigen::Vector2d vec{0, 0.3};
-
+    
     for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
     {
 
@@ -536,33 +495,27 @@ TEST_F(ConvertColorSpaceTest, Filter)
             (*it)[1] -= vec[1];
         }
     }
-
+    
     test = ccs.filter(test, vec);
 
     Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 
+/**
+ * @brief Construct a new test f object for extracting color from oRGB image
+ * 
+ */
 TEST_F(ConvertColorSpaceTest, Extract)
 {
-    const std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+    const std::string path("../../img/test.png");
     cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
     cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
     img.convertTo(img, CV_64FC3);
@@ -581,7 +534,7 @@ TEST_F(ConvertColorSpaceTest, Extract)
     switch (Crg)
     {
     case Crg:
-        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
         {
             //(*it)[0] = 0; //L
             (*it)[1] = 0; //Crg
@@ -590,7 +543,7 @@ TEST_F(ConvertColorSpaceTest, Extract)
         break;
 
     case Cyb:
-        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
         {
             //(*it)[0] = 0; //L
             //(*it)[1] = 0; //Crg
@@ -598,7 +551,7 @@ TEST_F(ConvertColorSpaceTest, Extract)
         }
         break;
     case L:
-        for (it = test.begin<cv::Vec3d>(); it != test.end<cv::Vec3d>(); ++it)
+        for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
         {
             //(*it)[0] = 0; //L
             (*it)[1] = 0; //Crg
@@ -612,23 +565,13 @@ TEST_F(ConvertColorSpaceTest, Extract)
     test = ccs.extract(test, ConvertColorSpace::Crg);
 
     Eigen::Vector3d imgVec{0, 0, 0}, testVec{0, 0, 0};
-    for (it = img.begin<cv::Vec3d>(); it != img.end<cv::Vec3d>(); ++it)
+    for (it = img.begin<cv::Vec3d>(),it1=test.begin<cv::Vec3d>();
+         it != img.end<cv::Vec3d>() && it1!=test.end<cv::Vec3d>();
+         ++it,++it1)
     {
-        imgVec[0] = (*it)[0];
-        imgVec[1] = (*it)[1];
-        imgVec[2] = (*it)[2];
-
-        for (it1 = it;;)
-        {
-            testVec[0] = (*it1)[0];
-            testVec[1] = (*it1)[1];
-            testVec[2] = (*it1)[2];
-            break;
-        }
-
-        EXPECT_NEAR(imgVec[0], testVec[0], 0.01);
-        EXPECT_NEAR(imgVec[1], testVec[1], 0.01);
-        EXPECT_NEAR(imgVec[2], testVec[2], 0.01);
+        EXPECT_NEAR((*it)[0], (*it1)[0], 0.01);
+        EXPECT_NEAR((*it)[1], (*it1)[1], 0.01);
+        EXPECT_NEAR((*it)[2], (*it1)[2], 0.01);
     }
 }
 

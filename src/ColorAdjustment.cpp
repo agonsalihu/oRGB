@@ -7,7 +7,7 @@ ColorAdjustment::ColorAdjustment(cv::Mat m)
 
 void ColorAdjustment::setImage(cv::Mat m)
 {
-    this->img=m;
+    this->img = m;
 }
 
 cv::Mat ColorAdjustment::getImage()

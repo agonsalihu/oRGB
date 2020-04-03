@@ -23,46 +23,46 @@
  * @brief Class for Color Shading and Adjustment
  * 
  */
-class ColorAdjustment{
-    private:
-        /**
-         * @brief Basic image
-         * 
-         */
-        cv::Mat img;
+class ColorAdjustment
+{
+     private:
+          /**
+          * @brief Basic image
+          * 
+          */
+          cv::Mat img;
 
-    public:
-        /**
-         * @brief Construct a new Color Adjustment object
-         * 
-         */
-        ColorAdjustment(void)=default;
-       
-        /**
-         * @brief Construct a new Color Adjustment object
-         * 
-         * @param m sets image for color adjusting
-         */
-        ColorAdjustment(cv::Mat m);
-        
-        /**
-         * @brief Destroy the Color Adjustment object
-         * 
-         */
-        ~ColorAdjustment()=default;
-        
-        /**
-         * @brief Set the Image object
-         * 
-         * @param m basic image
-         */
-        void setImage(cv::Mat m);
-        /**
-         * @brief Get the Image object
-         * 
-         * @return cv::Mat basic image
-         */
-        cv::Mat getImage();
-        
+     public:
+          /**
+          * @brief Construct a new Color Adjustment object
+          * 
+          */
+          ColorAdjustment(void) = default;
+
+          /**
+          * @brief Construct a new Color Adjustment object
+          * 
+          * @param m sets image for color adjusting
+          */
+          ColorAdjustment(cv::Mat m);
+
+          /**
+          * @brief Destroy the Color Adjustment object
+          * 
+          */
+          ~ColorAdjustment() = default;
+
+          /**
+          * @brief Set the Image object
+          * 
+          * @param m basic image
+          */
+          void setImage(cv::Mat m);
+          /**
+          * @brief Get the Image object
+          * 
+          * @return cv::Mat basic image
+          */
+          cv::Mat getImage();
 };
 #endif

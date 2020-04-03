@@ -8,10 +8,16 @@
 int main(int argc, char **argv)
 {
   //Path for image
-  std::string path("/home/solaborate/Desktop/2/oRGB/img/pots.jpg");
+  std::string path("../img/pots.jpg");
 
   //Read image and save in img
   cv::Mat img = cv::imread(path, cv::IMREAD_COLOR);
+
+  //Read image from command line argument
+  if (argc > 1)
+  {
+    path = argv[1]; // take image path as argument
+  }
 
   //Check if image is loaded
   if (!img.data)
@@ -36,7 +42,7 @@ int main(int argc, char **argv)
   //img=ccs.extract(ccs.getImage64b(),ConvertColorSpace::Crg);
 
   //Filter oRGB image
-  //img = ccs.filter(ccs.getImage64b(), Eigen::Vector2d{0, 0});
+  img = ccs.filter(ccs.getImage64b(), Eigen::Vector2d{0, 0});
 
   //Convert back to RGB
   img = ccs.convertToRGB();
